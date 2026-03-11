@@ -1,7 +1,7 @@
 use std::{io, path::Path};
 use ratatui::{layout::Margin, style::Style, symbols::scrollbar::HORIZONTAL};
 
-use crossterm::event::{KeyCode, KeyEvent, KeyEventKind};
+use crossterm::{event::{KeyCode, KeyEvent, KeyEventKind}, style::Color};
 use ratatui::{DefaultTerminal, Frame, layout::{Alignment, Constraint, Layout}, restore, style::Stylize, text::Line, widgets::{Block, Borders, Padding, Paragraph, Widget}};
 
 fn main()-> io::Result<()> {
@@ -24,8 +24,9 @@ pub struct Button{
     is_pressed:bool
 }
 impl Button{
-    fn if_pressed(){
-        //new scene logic whatever
+    fn press(&mut self, key_event:crossterm::event::KeyEvent){
+        if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Enter
+            {self.is_pressed = true;}
     }
 }
 impl Widget for &Button{
@@ -35,7 +36,14 @@ impl Widget for &Button{
         let button = Paragraph ::new(self.label.as_str())
         .alignment(Alignment::Center)
         .block(Block::default()
-                .borders(Borders::ALL));
+                .borders(Borders::ALL))
+                .style(
+                    if self.is_pressed {
+                        Style::default().bg(ratatui::style::Color::Blue).fg(ratatui::style::Color::White)}
+                    else {
+                        Style::default().bg(ratatui::style::Color::Gray).fg(ratatui::style::Color::Black)}
+                    
+                );
         button.render(area, buf);
     }
 }
@@ -54,8 +62,10 @@ impl MainMenu{
         frame.render_widget(self, frame.area());
     }
     fn handle_key_input(&mut self, key_event:crossterm::event::KeyEvent)-> io::Result<()>{
-        if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Char('q'){
-            self.exit = true;
+        if key_event.kind == KeyEventKind::Press
+        {   self.button.press(key_event);
+            if  key_event.code == KeyCode::Char('q'){ 
+                self.exit = true;}
         }
         Ok(())
     }
