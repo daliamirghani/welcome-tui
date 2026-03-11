@@ -1,15 +1,21 @@
 use ratatui::{widgets::{Paragraph, Block, Borders, Widget}, layout::Alignment, prelude::{Rect, Buffer}, style::{Style, Color}};
 use crossterm::event::{KeyEvent, KeyCode, KeyEventKind};
 
+use crate::main_menu::MainMenu;
+use crate::main_menu::Page;
+
+
 pub struct Button {
     pub label: String,
     pub is_pressed: bool,
 }
 
 impl Button {
-    pub fn press(&mut self, key_event: KeyEvent) {
+    pub fn press(&mut self, key_event: KeyEvent, menu:&mut MainMenu) {
         if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Enter {
             self.is_pressed = true;
+            menu.current_page = Page::ChoosingMenu;
+
         }
     }
 }

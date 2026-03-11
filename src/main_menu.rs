@@ -3,10 +3,16 @@ use ratatui::{DefaultTerminal};
 use crossterm::event::{KeyEvent, KeyCode, KeyEventKind};
 
 use crate::button::Button;
-
+pub enum Page {
+    MainMenu,
+    ChoosingMenu,
+    Installing
+}
 pub struct MainMenu {
     pub exit: bool,
     pub button: Button,
+    pub current_page:Page
+    
 }
 
 impl MainMenu {
@@ -22,8 +28,13 @@ impl MainMenu {
     }
 
     fn draw(&self, frame: &mut Frame) {
-        frame.render_widget(self, frame.area());
-    }
+        match self.current_page{
+            Page::MainMenu=> {
+                frame.render_widget(self, frame.area()); }
+            Page::ChoosingMenu =>{}
+            Page::Installing =>{}
+                
+    }}
 
     fn handle_key_input(&mut self, key_event: KeyEvent) -> std::io::Result<()> {
         if key_event.kind == KeyEventKind::Press {
@@ -59,7 +70,7 @@ impl Widget for &MainMenu {
 
         let button_chunks = Layout::default()
             .direction(ratatui::layout::Direction::Horizontal)
-            .constraints([Constraint::Min(0), Constraint::Length(20), Constraint::Min(0)])
+            .constraints([Constraint::Min(0), Constraint::Length(30), Constraint::Min(0)])
             .split(chunks[3]);
 
         Paragraph::new(r#" ██████  ███████  ██████     ██████  ██ ███████ ████████ ██████   ██████  
