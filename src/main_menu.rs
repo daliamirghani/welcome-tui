@@ -2,11 +2,11 @@ use ratatui::{Frame, layout::{Alignment, Constraint, Layout}, prelude::{Buffer, 
 use ratatui::{DefaultTerminal};
 use crossterm::event::{KeyEvent, KeyCode, KeyEventKind};
 
+use crate::installation_menu::InstallationMenu;
 use crate::button::Button;
 pub enum Page {
     MainMenu,
-    ChoosingMenu,
-    Installing
+    InstallationMenu,
 }
 pub struct MainMenu {
     pub exit: bool,
@@ -31,8 +31,7 @@ impl MainMenu {
         match self.current_page{
             Page::MainMenu=> {
                 frame.render_widget(self, frame.area()); }
-            Page::ChoosingMenu =>{}
-            Page::Installing =>{}
+            Page::InstallationMenu =>{}
                 
     }}
 

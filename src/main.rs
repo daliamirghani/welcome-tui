@@ -2,7 +2,9 @@ use std::io;
 use ratatui::{DefaultTerminal, restore};
 
 mod main_menu;
+mod installation_menu;
 mod button;
+
 
 use main_menu::MainMenu;
 use button::Button;
@@ -20,6 +22,7 @@ fn main() -> io::Result<()> {
                 label: "Press ENTER to get started".to_string(),
                 is_pressed: false,
             },
+            current_page: {}
         },
     };
     let result = app.main_menu.run(&mut terminal);
