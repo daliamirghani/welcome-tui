@@ -70,8 +70,8 @@ impl InstallationMenu{
                 let apps_string = apps.join(" ");
                 Command::new("bash")
                 .arg("-c")
-                .arg(format!("install.sh{}", apps_string))
-                .spawn() // runs async so i can show progress bar
+                .arg(format!("./install.sh {}", apps_string))
+                .spawn() // runs async so i can show progress bar later or sth
                 .expect("failed to run install script");
             }
 
