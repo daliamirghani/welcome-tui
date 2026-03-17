@@ -1,14 +1,17 @@
 use ratatui::{Frame, layout::{Alignment, Constraint, Layout}, prelude::{Buffer, Rect}, symbols, widgets::{Block, Borders, Paragraph, Widget}};
 use ratatui::{DefaultTerminal};
 use crossterm::event::{KeyEvent, KeyCode, KeyEventKind};
+use std::{fmt::format, process::Command};
+use crate::{App, button::Button};
 
-use crate::App;
 
 
 pub struct InstallationMenu {
-   pub all_apps: Vec<AppItem>,    
+    pub all_apps: Vec<AppItem>,    
     pub selected_items: Vec<AppItem>,
     pub selected_index: usize,
+    pub install_button: Button
+
     
 }
 #[derive(Clone)]
@@ -43,23 +46,35 @@ impl InstallationMenu{
         all_apps,
         selected_items: Vec::new(),
         selected_index: 0,
+        install_button: Button{label: "Install".to_string(), is_pressed:false},
     }
 }
 
     pub fn traverse(&mut self, key_event: KeyEvent){
-        let total= self.all_apps.len();
+        let total= self.all_apps.len()+1;
         if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Up{ 
             if self.selected_index!=0 {self.selected_index -= 1};
         }
         if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Down{ 
             if self.selected_index +1 < total {self.selected_index += 1};
+        if self.selected_index == self.all_apps.len(){
+            self.install_button.is_pressed =true;
+        }
         }
     }
     
     pub fn select(&mut self, key_event: KeyEvent){
         if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Enter{ 
-            self.all_apps[self.selected_index].selected=true;
-            // tfw ownership
+            if self.install_button.is_pressed{
+                let apps:Vec<String> = self.selected_items.iter().map(|app|app.name.clone()).collect();
+                let apps_string = apps.join(" ");
+                Command::new("bash")
+                .arg("-c")
+                .arg(format!("install.sh{}", apps_string))
+                .spawn() // runs async so i can show progress bar
+                .expect("failed to run install script");
+            }
+
             let app = self.all_apps[self.selected_index].clone();
             self.selected_items.push(app);
             self.all_apps[self.selected_index].selected = true;
