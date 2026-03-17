@@ -71,31 +71,75 @@ impl Widget for &InstallationMenu {
     fn render(self, area: Rect, buf: &mut Buffer)
         where
             Self: Sized {
-        let chunks = Layout::default()
-        .direction(ratatui::layout::Direction::Horizontal)
-        .constraints([Constraint::Percentage(50),Constraint::Percentage(50)])
-        .split(area);
+        
+        let vertical_chunks = Layout::default()
+            .direction(ratatui::layout::Direction::Vertical)
+            .constraints([
+                Constraint::Min(0), 
+                Constraint::Length(10), 
+                Constraint::Length(25), 
+                Constraint::Length(10),
+                Constraint::Min(0),
+            ])
+            .split(area);
+
+        let horizonta_chunks = Layout::default()
+            .direction(ratatui::layout::Direction::Horizontal)
+            .constraints([
+                Constraint::Min(0), 
+                Constraint::Length(30),
+                Constraint::Length(2),  
+                Constraint::Length(30), 
+                Constraint::Min(0),
+            ])
+            .split(vertical_chunks[2]);
+
+
+        let title_block = Paragraph::new("\n \n \n \n \n \n \n \nInstallation Menu")
+            .alignment(Alignment::Center)
+            ;
+        title_block.render(vertical_chunks[1], buf);
+
 
         let apps_block = Block::default()
-        .border_set(symbols::border::LIGHT_DOUBLE_DASHED)
-        .borders(Borders::ALL);
-        apps_block.render(chunks[0], buf);
-
+            .border_set(symbols::border::LIGHT_DOUBLE_DASHED)
+            .borders(Borders::ALL);
+        apps_block.render(horizonta_chunks[1], buf);
 
         let mut apps_lines = Vec::new();
-        for app in &self.all_apps  {
-            let line = format!("{}",app.name);
+        let mut selected_apps = Vec::new();
+        apps_lines.push("".to_string());  
+        apps_lines.push("".to_string());  
+        apps_lines.push("Applications".to_string());
+        apps_lines.push("------------".to_string());
+        apps_lines.push("".to_string());
+
+        for i in 0..self.all_apps.len() {
+            let app = &self.all_apps[i];
+            let prefix = if i == self.selected_index { "▶ " } else { "  " };
+            let line = format!("{}{}", prefix, app.name);
             apps_lines.push(line);
-            
         }
+         for app in &self.selected_items {
+            let line = format!("{}", app.name);
+            selected_apps.push(line);
+        }
+
         Paragraph::new(apps_lines.join("\n"))
-        .alignment(Alignment::Center)
-        .render(chunks[0], buf);
+            .alignment(Alignment::Center)
+            .render(horizonta_chunks[1], buf);
+
+        Paragraph::new(selected_apps.join("\n"))
+            .alignment(Alignment::Center)
+            .render(horizonta_chunks[3], buf);
 
         let selected_block = Block::default()
-        .border_set(symbols::border::LIGHT_DOUBLE_DASHED)
-        .borders(Borders::ALL);
-        selected_block.render(chunks[1], buf);
+            .border_set(symbols::border::LIGHT_DOUBLE_DASHED)
+            .borders(Borders::ALL);
+        selected_block.render(horizonta_chunks[3], buf);
+
+        let button_paragraph = Paragraph::new("\n [ When done choosing, Press Enter to Install ]")
+            .alignment(Alignment::Center);
+        button_paragraph.render(vertical_chunks[3], buf);
     }
-    
 }

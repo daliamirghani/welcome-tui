@@ -40,7 +40,6 @@ impl MainMenu {
         if key_event.kind == KeyEventKind::Press {
             match self.current_page{
                 Page::MainMenu =>{
-                    self.current_page = Page::InstallationMenu;
                     if key_event.code == KeyCode::Enter {
                     self.current_page = Page::InstallationMenu;
                 }
