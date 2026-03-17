@@ -46,7 +46,9 @@ impl MainMenu {
                 }
                 Page::InstallationMenu=> {
                     self.installation_menu.traverse(key_event);
-                    self.installation_menu.select(key_event);
+                   if  self.installation_menu.select(key_event){
+                    self.exit = true;
+                   }
 
                 }
             }

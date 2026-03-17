@@ -28,13 +28,7 @@ impl Widget for &Button {
         let button = Paragraph::new(self.label.as_str())
             .alignment(Alignment::Center)
             .block(Block::default().borders(Borders::ALL))
-            .style(
-                if self.is_pressed {
-                    Style::default().bg(Color::Blue).fg(Color::White)
-                } else {
-                    Style::default().bg(Color::Gray).fg(Color::Black)
-                },
-            );
+            .style( Style::default().bg(Color::Gray).fg(Color::Black));
 
         button.render(area, buf);
     }

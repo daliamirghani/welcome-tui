@@ -1,8 +1,7 @@
-use ratatui::{Frame, layout::{Alignment, Constraint, Layout}, prelude::{Buffer, Rect}, symbols, widgets::{Block, Borders, Paragraph, Widget}};
-use ratatui::{DefaultTerminal};
+use ratatui::{layout::{Alignment, Constraint, Layout}, prelude::{Buffer, Rect}, symbols, widgets::{Block, Borders, Paragraph, Widget},style::{Style, Color}};
 use crossterm::event::{KeyEvent, KeyCode, KeyEventKind};
-use std::{fmt::format, process::Command};
-use crate::{App, button::Button};
+use std::{process::Command};
+use crate::{button::Button};
 
 
 
@@ -62,24 +61,26 @@ all_apps.push(AppItem { name: "Chromium".into(), actual_name: "chromium".into(),
         }
     }
     
-    pub fn select(&mut self, key_event: KeyEvent){
+    pub fn select(&mut self, key_event: KeyEvent)->bool{
         if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Enter{ 
             if self.install_button.is_pressed{
                 let apps:Vec<String> = self.selected_items.iter().map(|app|app.actual_name.clone()).collect();
                 let apps_string = apps.join(" ");
-                println!("DEBUG: The string being sent is: [{}]", apps_string);
                 Command::new("bash")
                 .arg("install.sh")
                 .arg(apps_string) 
-                .spawn()
+                .status()
                 .expect("failed to run install script");
-            }
+                return true;
 
-            let app = self.all_apps[self.selected_index].clone();
+            }
+            let app: AppItem = self.all_apps[self.selected_index].clone();
             self.selected_items.push(app);
             self.all_apps[self.selected_index].selected = true;
         }
-    }
+    
+    false
+}
 }
 
 impl Widget for &InstallationMenu {
@@ -112,7 +113,7 @@ impl Widget for &InstallationMenu {
 
         let title_block = Paragraph::new("\n \n \n \n \n \n \n \nInstallation Menu")
             .alignment(Alignment::Center)
-            ;
+            .style(Style::default().fg(Color::Yellow));
         title_block.render(vertical_chunks[1], buf);
 
 
@@ -122,7 +123,8 @@ impl Widget for &InstallationMenu {
         apps_block.render(horizonta_chunks[1], buf);
 
         let mut apps_lines = Vec::new();
-        let mut selected_apps = Vec::new();
+        let mut selected_lines = Vec::new();
+
         apps_lines.push("".to_string());  
         apps_lines.push("".to_string());  
         apps_lines.push("Applications".to_string());
@@ -135,16 +137,22 @@ impl Widget for &InstallationMenu {
             let line = format!("{}{}", prefix, app.name);
             apps_lines.push(line);
         }
-         for app in &self.selected_items {
+        selected_lines.push("".to_string());  
+        selected_lines.push("".to_string());  
+        selected_lines.push("Selected Items".to_string());
+        selected_lines.push("------------".to_string());
+        selected_lines.push("".to_string());
+
+        for app in &self.selected_items {
             let line = format!("{}", app.name);
-            selected_apps.push(line);
+            selected_lines.push(line);
         }
 
         Paragraph::new(apps_lines.join("\n"))
             .alignment(Alignment::Center)
             .render(horizonta_chunks[1], buf);
 
-        Paragraph::new(selected_apps.join("\n"))
+        Paragraph::new(selected_lines.join("\n"))
             .alignment(Alignment::Center)
             .render(horizonta_chunks[3], buf);
 
@@ -153,8 +161,17 @@ impl Widget for &InstallationMenu {
             .borders(Borders::ALL);
         selected_block.render(horizonta_chunks[3], buf);
 
+        let button_color = if self.selected_index == self.all_apps.len(){
+            Color::Yellow
+        }
+        else {
+            Color::Gray
+        };
+
         let button_paragraph = Paragraph::new("\n [ When done choosing, Press Enter to Install ]")
-            .alignment(Alignment::Center);
+            .alignment(Alignment::Center)
+            .style(Style::default().fg(button_color));
+
         button_paragraph.render(vertical_chunks[3], buf);
     }
 }
