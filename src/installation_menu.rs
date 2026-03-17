@@ -17,6 +17,7 @@ pub struct InstallationMenu {
 #[derive(Clone)]
 pub struct AppItem {
     pub name: String,
+    pub actual_name:String, //for installation commands
     pub category: String,
     pub selected: bool,
     
@@ -24,24 +25,22 @@ pub struct AppItem {
 
 impl InstallationMenu{
     pub fn create_menu() -> InstallationMenu {
-    let mut all_apps = Vec::new();
-    {
-    all_apps.push(AppItem { name: "VS Code".to_string(), category: "Development".to_string(), selected: false });
-    all_apps.push(AppItem { name: "Python".to_string(), category: "Development".to_string(), selected: false });
-    all_apps.push(AppItem { name: "Node.js".to_string(), category: "Development".to_string(), selected: false });
-    all_apps.push(AppItem { name: "React.js".to_string(), category: "Development".to_string(), selected: false });
-    all_apps.push(AppItem { name: "Git".to_string(), category: "Development".to_string(), selected: false });
-    all_apps.push(AppItem { name: "Vim".to_string(), category: "Development".to_string(), selected: false });
-    all_apps.push(AppItem { name: "Nano".to_string(), category: "Development".to_string(), selected: false });
+let mut all_apps = Vec::new();
+all_apps.push(AppItem { name: "VS Code".into(), actual_name: "code".into(), category: "Development".into(), selected: false });
+all_apps.push(AppItem { name: "Python".into(), actual_name: "python".into(), category: "Development".into(), selected: false });
+all_apps.push(AppItem { name: "Node.js".into(), actual_name: "nodejs npm".into(), category: "Development".into(), selected: false });
+all_apps.push(AppItem { name: "Git".into(), actual_name: "git".into(), category: "Development".into(), selected: false });
+all_apps.push(AppItem { name: "Vim".into(), actual_name: "vim".into(), category: "Development".into(), selected: false });
+all_apps.push(AppItem { name: "Nano".into(), actual_name: "nano".into(), category: "Development".into(), selected: false });
 
-    all_apps.push(AppItem { name: "LibreOffice".to_string(), category: "Productivity".to_string(), selected: false });
+all_apps.push(AppItem { name: "LibreOffice".into(), actual_name: "libreoffice-fresh".into(), category: "Productivity".into(), selected: false });
 
-    all_apps.push(AppItem { name: "Blender".to_string(), category: "Design".to_string(), selected: false });
+all_apps.push(AppItem { name: "Blender".into(), actual_name: "blender".into(), category: "Design".into(), selected: false });
 
-    all_apps.push(AppItem { name: "VLC".to_string(), category: "Utilities".to_string(), selected: false });
-    all_apps.push(AppItem { name: "Firefox".to_string(), category: "Utilities".to_string(), selected: false });
-    all_apps.push(AppItem { name: "Chrome".to_string(), category: "Utilities".to_string(), selected: false });
-    }
+all_apps.push(AppItem { name: "VLC".into(), actual_name: "vlc".into(), category: "Utilities".into(), selected: false });
+all_apps.push(AppItem { name: "Firefox".into(), actual_name: "firefox".into(), category: "Utilities".into(), selected: false });
+all_apps.push(AppItem { name: "Chromium".into(), actual_name: "chromium".into(), category: "Utilities".into(), selected: false });
+
     InstallationMenu {
         all_apps,
         selected_items: Vec::new(),
@@ -66,12 +65,13 @@ impl InstallationMenu{
     pub fn select(&mut self, key_event: KeyEvent){
         if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Enter{ 
             if self.install_button.is_pressed{
-                let apps:Vec<String> = self.selected_items.iter().map(|app|app.name.clone()).collect();
+                let apps:Vec<String> = self.selected_items.iter().map(|app|app.actual_name.clone()).collect();
                 let apps_string = apps.join(" ");
+                println!("DEBUG: The string being sent is: [{}]", apps_string);
                 Command::new("bash")
-                .arg("-c")
-                .arg(format!("./install.sh {}", apps_string))
-                .spawn() // runs async so i can show progress bar later or sth
+                .arg("install.sh")
+                .arg(apps_string) 
+                .spawn()
                 .expect("failed to run install script");
             }
 
