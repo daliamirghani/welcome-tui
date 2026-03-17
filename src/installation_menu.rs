@@ -72,7 +72,7 @@ impl Widget for &InstallationMenu {
         where
             Self: Sized {
         let chunks = Layout::default()
-        .direction(ratatui::layout::Direction::Vertical)
+        .direction(ratatui::layout::Direction::Horizontal)
         .constraints([Constraint::Percentage(50),Constraint::Percentage(50)])
         .split(area);
 
@@ -80,6 +80,17 @@ impl Widget for &InstallationMenu {
         .border_set(symbols::border::LIGHT_DOUBLE_DASHED)
         .borders(Borders::ALL);
         apps_block.render(chunks[0], buf);
+
+
+        let mut apps_lines = Vec::new();
+        for app in &self.all_apps  {
+            let line = format!("{}",app.name);
+            apps_lines.push(line);
+            
+        }
+        Paragraph::new(apps_lines.join("\n"))
+        .alignment(Alignment::Center)
+        .render(chunks[0], buf);
 
         let selected_block = Block::default()
         .border_set(symbols::border::LIGHT_DOUBLE_DASHED)
