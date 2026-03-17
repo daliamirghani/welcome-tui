@@ -11,7 +11,8 @@ pub enum Page {
 pub struct MainMenu {
     pub exit: bool,
     pub button: Button,
-    pub current_page:Page
+    pub current_page:Page,
+    pub installation_menu:InstallationMenu
     
 }
 
@@ -31,13 +32,26 @@ impl MainMenu {
         match self.current_page{
             Page::MainMenu=> {
                 frame.render_widget(self, frame.area()); }
-            Page::InstallationMenu =>{}
+            Page::InstallationMenu =>{frame.render_widget(&self.installation_menu, frame.area());}
                 
     }}
 
     fn handle_key_input(&mut self, key_event: KeyEvent) -> std::io::Result<()> {
         if key_event.kind == KeyEventKind::Press {
-            self.button.press(key_event);
+            match self.current_page{
+                Page::MainMenu =>{
+                    self.current_page = Page::InstallationMenu;
+                    if key_event.code == KeyCode::Enter {
+                    self.current_page = Page::InstallationMenu;
+                }
+                }
+                Page::InstallationMenu=> {
+                    self.installation_menu.traverse(key_event);
+                    self.installation_menu.select(key_event);
+
+                }
+            }
+            
             if key_event.code == KeyCode::Char('q') {
                 self.exit = true;
             }

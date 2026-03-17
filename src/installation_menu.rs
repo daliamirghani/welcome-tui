@@ -1,4 +1,4 @@
-use ratatui::{Frame, layout::{Alignment, Constraint, Layout}, prelude::{Buffer, Rect}, widgets::{Block, Borders, Paragraph, Widget}};
+use ratatui::{Frame, layout::{Alignment, Constraint, Layout}, prelude::{Buffer, Rect}, symbols, widgets::{Block, Borders, Paragraph, Widget}};
 use ratatui::{DefaultTerminal};
 use crossterm::event::{KeyEvent, KeyCode, KeyEventKind};
 
@@ -46,7 +46,7 @@ impl InstallationMenu{
     }
 }
 
-    fn traverse(&mut self, key_event: KeyEvent){
+    pub fn traverse(&mut self, key_event: KeyEvent){
         let total= self.all_apps.len();
         if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Up{ 
             if self.selected_index!=0 {self.selected_index -= 1};
@@ -56,7 +56,7 @@ impl InstallationMenu{
         }
     }
     
-    fn select(&mut self, key_event: KeyEvent){
+    pub fn select(&mut self, key_event: KeyEvent){
         if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Enter{ 
             self.all_apps[self.selected_index].selected=true;
             // tfw ownership
@@ -65,4 +65,26 @@ impl InstallationMenu{
             self.all_apps[self.selected_index].selected = true;
         }
     }
+}
+
+impl Widget for &InstallationMenu {
+    fn render(self, area: Rect, buf: &mut Buffer)
+        where
+            Self: Sized {
+        let chunks = Layout::default()
+        .direction(ratatui::layout::Direction::Vertical)
+        .constraints([Constraint::Percentage(50),Constraint::Percentage(50)])
+        .split(area);
+
+        let apps_block = Block::default()
+        .border_set(symbols::border::LIGHT_DOUBLE_DASHED)
+        .borders(Borders::ALL);
+        apps_block.render(chunks[0], buf);
+
+        let selected_block = Block::default()
+        .border_set(symbols::border::LIGHT_DOUBLE_DASHED)
+        .borders(Borders::ALL);
+        selected_block.render(chunks[1], buf);
+    }
+    
 }
