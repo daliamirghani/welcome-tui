@@ -2,11 +2,11 @@
 
 GREEN='\033[1;32m'
 RED='\033[1;31m'
+YELLOW='\033[1;33m'
 NC='\033[0m'
 BOLD='\033[1m'
 
-sudo apt update -y
-sudo apt install -y $@
+sudo pacman -Sy --noconfirm $@
 
 clear
 
@@ -19,7 +19,7 @@ else
 fi
 
 echo ""
-echo -e "${BOLD}Installation process finished.${NC}"
+echo -e "${YELLOW}Installation process finished.${NC}"
 echo "Closing in 5 seconds..."
 
 sleep 5
