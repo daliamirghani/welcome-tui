@@ -94,17 +94,20 @@ impl Widget for &MainMenu {
             .constraints([Constraint::Min(0), Constraint::Length(30), Constraint::Min(0)])
             .split(chunks[3]);
 
-        Paragraph::new(r#" ██████  ███████  ██████     ██████  ██ ███████ ████████ ██████   ██████  
-██    ██ ██      ██          ██   ██ ██ ██         ██    ██   ██ ██    ██ 
-██    ██ ███████ ██          ██   ██ ██ ███████    ██    ██████  ██    ██ 
-██    ██      ██ ██          ██   ██ ██      ██    ██    ██   ██ ██    ██ 
- ██████  ███████  ██████     ██████  ██ ███████    ██    ██   ██  ██████  
-                                                                          
-                                                                          "#)
+        Paragraph::new(r#"                                                                                          
+                                         ▄▄▄▄         ██                                  
+                                         ▀▀██         ▀▀                                  
+  ▄████▄   ▄▄█████▄   ▄█████▄              ██       ████     ██▄████▄  ██    ██  ▀██  ██▀ 
+ ██▀  ▀██  ██▄▄▄▄ ▀  ██▀    ▀              ██         ██     ██▀   ██  ██    ██    ████   
+ ██    ██   ▀▀▀▀██▄  ██                    ██         ██     ██    ██  ██    ██    ▄██▄   
+ ▀██▄▄██▀  █▄▄▄▄▄██  ▀██▄▄▄▄█              ██▄▄▄   ▄▄▄██▄▄▄  ██    ██  ██▄▄▄███   ▄█▀▀█▄  
+   ▀▀▀▀     ▀▀▀▀▀▀     ▀▀▀▀▀                ▀▀▀▀   ▀▀▀▀▀▀▀▀  ▀▀    ▀▀   ▀▀▀▀ ▀▀  ▀▀▀  ▀▀▀ 
+                                                                                          
+                                                                                          "#)
         .alignment(Alignment::Center)
         .render(chunks[1], buf);
 
-        Paragraph::new(r#"Welcome to osc-distro!
+        Paragraph::new(r#"Welcome to osc-linux!
 The linux distribution that is catered to your needs as an OSCian.
 To make your description more personal,select the applications that you want to get pre-installed,
 We'll take care of it for you!
