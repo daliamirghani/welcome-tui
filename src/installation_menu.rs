@@ -31,14 +31,15 @@ all_apps.push(AppItem { name: "Node.js".into(), actual_name: "nodejs npm".into()
 all_apps.push(AppItem { name: "Git".into(), actual_name: "git".into(), category: "Development".into(), selected: false });
 all_apps.push(AppItem { name: "Vim".into(), actual_name: "vim".into(), category: "Development".into(), selected: false });
 all_apps.push(AppItem { name: "Nano".into(), actual_name: "nano".into(), category: "Development".into(), selected: false });
-
 all_apps.push(AppItem { name: "LibreOffice".into(), actual_name: "libreoffice-fresh".into(), category: "Productivity".into(), selected: false });
-
+all_apps.push(AppItem { name: "Fastfetch".into(), actual_name: "fastfetch".into(), category: "System".into(), selected: false });
 all_apps.push(AppItem { name: "Blender".into(), actual_name: "blender".into(), category: "Design".into(), selected: false });
-
 all_apps.push(AppItem { name: "VLC".into(), actual_name: "vlc".into(), category: "Utilities".into(), selected: false });
 all_apps.push(AppItem { name: "Firefox".into(), actual_name: "firefox".into(), category: "Utilities".into(), selected: false });
 all_apps.push(AppItem { name: "Chromium".into(), actual_name: "chromium".into(), category: "Utilities".into(), selected: false });
+all_apps.push(AppItem { name: "Kitty".into(), actual_name: "kitty".into(), category: "Terminal".into(), selected: false });
+all_apps.push(AppItem { name: "Docker".into(), actual_name: "docker".into(), category: "Development".into(), selected: false });
+all_apps.push(AppItem { name: "Wireshark".into(), actual_name: "wireshark-qt".into(), category: "Networking".into(), selected: false });
 
     InstallationMenu {
         all_apps,
@@ -75,8 +76,9 @@ all_apps.push(AppItem { name: "Chromium".into(), actual_name: "chromium".into(),
 
             }
             let app: AppItem = self.all_apps[self.selected_index].clone();
+            if self.all_apps[self.selected_index].selected != true{
             self.selected_items.push(app);
-            self.all_apps[self.selected_index].selected = true;
+            self.all_apps[self.selected_index].selected = true;}
         }
     
     false
@@ -168,7 +170,7 @@ impl Widget for &InstallationMenu {
             Color::Gray
         };
 
-        let button_paragraph = Paragraph::new("\n [ When done choosing, Press Enter to Install ]")
+        let button_paragraph = Paragraph::new("\n [ Press Enter to Install ]")
             .alignment(Alignment::Center)
             .style(Style::default().fg(button_color));
 

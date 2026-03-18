@@ -19,11 +19,11 @@ pub struct MainMenu {
 impl MainMenu {
     pub fn run(&mut self, terminal: &mut DefaultTerminal) -> std::io::Result<()> {
         while !self.exit {
+            terminal.draw(|frame| self.draw(frame))?;
             match crossterm::event::read()? {
                 crossterm::event::Event::Key(key_event) => self.handle_key_input(key_event)?,
                 _ => {}
             }
-            terminal.draw(|frame| self.draw(frame))?;
         }
         Ok(())
     }
@@ -38,6 +38,12 @@ impl MainMenu {
 
     fn handle_key_input(&mut self, key_event: KeyEvent) -> std::io::Result<()> {
         if key_event.kind == KeyEventKind::Press {
+            match key_event.code{
+                KeyCode::Esc | KeyCode::Char('q') =>{
+                    self.exit = true;
+                }
+                _ =>{}
+            }
             match self.current_page{
                 Page::MainMenu =>{
                     if key_event.code == KeyCode::Enter {
@@ -47,7 +53,8 @@ impl MainMenu {
                 Page::InstallationMenu=> {
                     self.installation_menu.traverse(key_event);
                    if  self.installation_menu.select(key_event){
-                    self.exit = true;
+                   { println!("Installation complete");
+                    self.exit = true;}
                    }
 
                 }
