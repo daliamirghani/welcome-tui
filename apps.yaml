@@ -1,0 +1,74 @@
+  - name: VS Code
+    actual_name: code
+    category: Development
+    selected: false
+
+  - name: Python
+    actual_name: python
+    category: Development
+    selected: false
+
+  - name: Node.js
+    actual_name: nodejs npm
+    category: Development
+    selected: false
+
+  - name: Git
+    actual_name: git
+    category: Development
+    selected: false
+
+  - name: Vim
+    actual_name: vim
+    category: Development
+    selected: false
+
+  - name: Nano
+    actual_name: nano
+    category: Development
+    selected: false
+
+  - name: LibreOffice
+    actual_name: libreoffice-fresh
+    category: Productivity
+    selected: false
+
+  - name: Fastfetch
+    actual_name: fastfetch
+    category: System
+    selected: false
+
+  - name: Blender
+    actual_name: blender
+    category: Design
+    selected: false
+
+  - name: VLC
+    actual_name: vlc
+    category: Utilities
+    selected: false
+
+  - name: Firefox
+    actual_name: firefox
+    category: Utilities
+    selected: false
+
+  - name: Chromium
+    actual_name: chromium
+    category: Utilities
+    selected: false
+
+  - name: Kitty
+    actual_name: kitty
+    category: Terminal
+    selected: false
+
+  - name: Docker
+    actual_name: docker
+    category: Development
+    selected: false
+
+  - name: Wireshark
+    actual_name: wireshark-qt
+    category: Networking
+    selected: false
