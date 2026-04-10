@@ -85,6 +85,8 @@ impl Widget for &MainMenu {
                 Constraint::Length(10),
                 Constraint::Length(10),
                 Constraint::Length(3),
+                Constraint::Length(1),
+                Constraint::Length(1),
                 Constraint::Min(0),
             ])
             .split(area);
@@ -97,6 +99,9 @@ impl Widget for &MainMenu {
         self.render_title(chunks[1], buf);
         self.render_body(chunks[2], buf);
         self.render_button(button_chunks[1], buf);
+        Paragraph::new("Press 'q' to exit")
+        .alignment(Alignment::Center)
+        .render(chunks[5], buf);
 }}
 
 impl MainMenu {
