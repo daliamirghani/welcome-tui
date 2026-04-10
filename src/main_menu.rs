@@ -94,6 +94,13 @@ impl Widget for &MainMenu {
             .constraints([Constraint::Min(0), Constraint::Length(30), Constraint::Min(0)])
             .split(chunks[3]);
 
+        self.render_title(chunks[1], buf);
+        self.render_body(chunks[2], buf);
+        self.render_button(button_chunks[1], buf);
+}}
+
+impl MainMenu {
+    fn render_title(&self, area: Rect, buf: &mut Buffer) {
         Paragraph::new(r#"                                                                                          
                                          ▄▄▄▄         ██                                  
                                          ▀▀██         ▀▀                                  
@@ -105,17 +112,22 @@ impl Widget for &MainMenu {
                                                                                           
                                                                                           "#)
         .alignment(Alignment::Center)
-        .render(chunks[1], buf);
+        .render(area, buf);
+    }
 
-        Paragraph::new(r#"Welcome to osc-linux!
-The linux distribution that is catered to your needs as an OSCian.
-To make your description more personal,select the applications that you want to get pre-installed,
-We'll take care of it for you!
-"#)
-        .alignment(Alignment::Center)
-        .style(ratatui::style::Style::default().bold())
-        .render(chunks[2], buf);
+    fn render_body(&self, area: Rect, buf: &mut Buffer) {
+        let text = "Welcome to osc-linux!\n\
+                    The linux distribution that is catered to your needs as an OSCian.\n\
+                    To make your description more personal, select the applications that you want to get pre-installed,\n\
+                    We'll take care of it for you!";
+                    
+        Paragraph::new(text)
+            .alignment(Alignment::Center)
+            .style(ratatui::style::Style::default().bold())
+            .render(area, buf);
+    }
 
-        self.button.render(button_chunks[1], buf);
+    fn render_button(&self, area: Rect, buf: &mut Buffer) {
+        self.button.render(area, buf);
     }
 }
